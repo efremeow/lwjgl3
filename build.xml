@@ -520,7 +520,6 @@
             <compileBinding binding="openal"/>
             <compileBinding binding="opencl"/>
             <compileBinding binding="opengles"/>
-            <compileBinding binding="openvr"/>
             <compileBinding binding="opus"/>
             <compileBinding binding="par"/>
             <compileBinding binding="remotery"/>
@@ -830,7 +829,7 @@
             <include name="org/lwjgl/demo/egl/**" if:set="test.egl"/>
             <include name="org/lwjgl/demo/glfw/**" if:set="test.glfw"/>
             <include name="org/lwjgl/demo/llvm/**" if:true="${binding.llvm}"/>
-            <include name="org/lwjgl/demo/nanovg/**" if:set="test.nanovg"/>
+<!--            <include name="org/lwjgl/demo/nanovg/**" if:set="test.nanovg"/>-->
             <include name="org/lwjgl/demo/nuklear/**" if:set="test.nuklear"/>
 
             <include name="org/lwjgl/demo/openal/**" if:true="${binding.openal}"/>
@@ -843,8 +842,8 @@
 
             <include name="org/lwjgl/demo/opengl/**" if:true="${binding.opengl}"/>
 
-            <include name="org/lwjgl/demo/openvr/**" if:true="${binding.openvr}"/>
-            <include name="org/lwjgl/demo/openxr/**" if:set="test.openxr"/>
+<!--            <include name="org/lwjgl/demo/openvr/**" if:true="${binding.openvr}"/>-->
+<!--            <include name="org/lwjgl/demo/openxr/**" if:set="test.openxr"/>-->
             <include name="org/lwjgl/demo/ovr/**" if:true="${binding.ovr}"/>
             <include name="org/lwjgl/demo/stb/**" if:set="test.stb"/>
 
@@ -1423,30 +1422,9 @@
         </sequential>
     </macrodef>
 
-    <target name="-check-release-jdk">
-        <fail message="The JAVA8_HOME environment variable is not set." if:set="jdk9">
-            <condition>
-                <not><isset property="env.JAVA8_HOME"/></not>
-            </condition>
-        </fail>
-
-        <local name="input"/>
-        <input
-            message="It is recommended to build LWJGL releases on JDK 16 or higher. Continue with current JDK?"
-            validargs="y,n"
-            defaultvalue="n"
-            addproperty="input"
-            unless:set="jdk16"
-        />
-        <fail message="Cancelled" unless:set="jdk16">
-            <condition>
-                <equals arg1="n" arg2="${input}"/>
-            </condition>
-        </fail>
-    </target>
 
     <!-- Set the LWJGL_BUILD_OFFLINE=true environment variable for local builds. -->
-    <target name="release" depends="-check-release-jdk,compile,-compile-generator,-build-version">
+    <target name="release" depends="compile,-compile-generator,-build-version">
         <!--
         CUSTOM BUILD (LOCAL):
             * build.version="M.m.r SNAPSHOT"
@@ -1607,27 +1585,27 @@
                 <get-release platform="linux" arch="arm64" file="libglfw.so"/>
                 <get-release platform="linux" arch="arm64" file="libglfw.so.git"/>
 
-                <get-release platform="linux" arch="arm32" file="libglfw.so"/>
-                <get-release platform="linux" arch="arm32" file="libglfw.so.git"/>
+<!--                <get-release platform="linux" arch="arm32" file="libglfw.so"/>-->
+<!--                <get-release platform="linux" arch="arm32" file="libglfw.so.git"/>-->
 
-                <get-release platform="macos" arch="x64" file="libglfw.dylib"/>
-                <get-release platform="macos" arch="x64" file="libglfw.dylib.git"/>
-                <get-release platform="macos" arch="x64" file="libglfw_async.dylib"/>
-                <get-release platform="macos" arch="x64" file="libglfw_async.dylib.git"/>
+<!--                <get-release platform="macos" arch="x64" file="libglfw.dylib"/>-->
+<!--                <get-release platform="macos" arch="x64" file="libglfw.dylib.git"/>-->
+<!--                <get-release platform="macos" arch="x64" file="libglfw_async.dylib"/>-->
+<!--                <get-release platform="macos" arch="x64" file="libglfw_async.dylib.git"/>-->
+<!---->
+<!--                <get-release platform="macos" arch="arm64" file="libglfw.dylib"/>-->
+<!--                <get-release platform="macos" arch="arm64" file="libglfw.dylib.git"/>-->
+<!--                <get-release platform="macos" arch="arm64" file="libglfw_async.dylib"/>-->
+<!--                <get-release platform="macos" arch="arm64" file="libglfw_async.dylib.git"/>-->
 
-                <get-release platform="macos" arch="arm64" file="libglfw.dylib"/>
-                <get-release platform="macos" arch="arm64" file="libglfw.dylib.git"/>
-                <get-release platform="macos" arch="arm64" file="libglfw_async.dylib"/>
-                <get-release platform="macos" arch="arm64" file="libglfw_async.dylib.git"/>
-
-                <get-release platform="windows" arch="x64" file="glfw.dll"/>
-                <get-release platform="windows" arch="x64" file="glfw.dll.git"/>
-
-                <get-release platform="windows" arch="x86" file="glfw.dll"/>
-                <get-release platform="windows" arch="x86" file="glfw.dll.git"/>
-
-                <get-release platform="windows" arch="arm64" file="glfw.dll"/>
-                <get-release platform="windows" arch="arm64" file="glfw.dll.git"/>
+<!--                <get-release platform="windows" arch="x64" file="glfw.dll"/>-->
+<!--                <get-release platform="windows" arch="x64" file="glfw.dll.git"/>-->
+<!---->
+<!--                <get-release platform="windows" arch="x86" file="glfw.dll"/>-->
+<!--                <get-release platform="windows" arch="x86" file="glfw.dll.git"/>-->
+<!---->
+<!--                <get-release platform="windows" arch="arm64" file="glfw.dll"/>-->
+<!--                <get-release platform="windows" arch="arm64" file="glfw.dll.git"/>-->
             </natives>
         </release-module>
 
@@ -1740,26 +1718,6 @@
         <!-- OpenGL ES -->
         <release-module name="opengles" native-library="lwjgl_opengles" title="OpenGL ES" if:true="${binding.opengles}"/>
 
-        <!-- OpenVR -->
-        <release-module name="openvr" title="OpenVR" if:true="${binding.openvr}">
-            <natives>
-                <get-release platform="linux" arch="x64" file="liblwjgl_openvr.so"/>
-                <get-release platform="linux" arch="x64" file="libopenvr_api.so"/>
-                <get-release platform="linux" arch="x64" file="libopenvr_api.so.git"/>
-
-                <get-release platform="macos" arch="x64" file="liblwjgl_openvr.dylib"/>
-                <get-release platform="macos" arch="x64" file="libopenvr_api.dylib"/>
-                <get-release platform="macos" arch="x64" file="libopenvr_api.dylib.git"/>
-
-                <get-release platform="windows" arch="x64" file="lwjgl_openvr.dll"/>
-                <get-release platform="windows" arch="x64" file="openvr_api.dll"/>
-                <get-release platform="windows" arch="x64" file="openvr_api.dll.git"/>
-
-                <get-release platform="windows" arch="x86" file="lwjgl_openvr.dll"/>
-                <get-release platform="windows" arch="x86" file="openvr_api.dll"/>
-                <get-release platform="windows" arch="x86" file="openvr_api.dll.git"/>
-            </natives>
-        </release-module>
 
         <!-- OpenXR -->
         <release-module name="openxr" title="OpenXR" if:true="${binding.openxr}">

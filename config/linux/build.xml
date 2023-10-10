@@ -5,7 +5,7 @@
 <project name="native-linux" basedir="../.." xmlns:if="ant:if" xmlns:unless="ant:unless">
     <import file="../build-definitions.xml"/>
 
-    <property name="gcc.prefix" value="aarch64-linux-gnu-" if:set="build.arch.arm64"/>
+    <property name="gcc.prefix" value="aarch64-poky-linux-" if:set="build.arch.arm64"/>
     <property name="gcc.prefix" value="arm-linux-gnueabihf-" if:set="build.arch.arm32"/>
 
     <condition property="gcc.prefix" value="${gcc.prefix}" else="">
@@ -47,6 +47,9 @@
 
                 <arg value="-I${module.lwjgl.rel}/core/src/main/c"/>
                 <arg value="-I${module.lwjgl.rel}/core/src/main/c/${platform}"/>
+
+                <arg value="-I/opt/fsl-imx-xwayland/5.4-zeus/sysroots/aarch64-poky-linux/usr/include"/>
+                <arg value="--sysroot=/opt/fsl-imx-xwayland/5.4-zeus/sysroots/aarch64-poky-linux"/>
 
                 <arg value="-I${src.main.rel}" if:true="@{simple}"/>
 
@@ -130,6 +133,8 @@
 
                 <arg line="-z noexecstack"/>
                 <arg line="-O3 -flto -fPIC -pthread -o ${lib.arch}/lib${name}.so"/>
+
+                <arg line="--sysroot=/opt/fsl-imx-xwayland/5.4-zeus/sysroots/aarch64-poky-linux"/>
 
                 <arg line="-Wl,--no-undefined"/>
                 <arg line="-Wl,--version-script,${version.script}"/>
@@ -260,49 +265,49 @@
         </build>
 
         <!-- NativeFileDialog -->
-        <build module="nfd" simple="true" linker="g++" if:true="${binding.nfd}">
-            <beforeCompile>
-                <local name="linux.triplet"/>
-                <condition property="linux.triplet" value="x86_64-linux-gnu"><not><isset property="build.arch.arm"/></not></condition>
-                <condition property="linux.triplet" value="arm-linux-gnueabihf"><isset property="build.arch.arm32"/></condition>
-                <condition property="linux.triplet" value="aarch64-linux-gnu"><isset property="build.arch.arm64"/></condition>
+<!--        <build module="nfd" simple="true" linker="g++" if:true="${binding.nfd}">-->
+<!--            <beforeCompile>-->
+<!--                <local name="linux.triplet"/>-->
+<!--                <condition property="linux.triplet" value="x86_64-linux-gnu"><not><isset property="build.arch.arm"/></not></condition>-->
+<!--                <condition property="linux.triplet" value="arm-linux-gnueabihf"><isset property="build.arch.arm32"/></condition>-->
+<!--                <condition property="linux.triplet" value="aarch64-linux-gnu"><isset property="build.arch.arm64"/></condition>-->
 
-                <compile lang="c++">
-                    <arg line="-I/usr/include/gtk-3.0 -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/usr/lib/${linux.triplet}/glib-2.0/include -I/usr/include/pango-1.0 -I/usr/include/harfbuzz -I/usr/include/cairo -I/usr/include/gdk-pixbuf-2.0 -I/usr/include/atk-1.0"/>
-                    <arg value="-I${src.main.rel}/include"/>
-                    <fileset dir="." includes="${src.main}/nfd_gtk.cpp"/>
-                </compile>
-            </beforeCompile>
-            <source>
-                <arg value="-I${src.main.rel}/include"/>
-            </source>
-            <link>
-                <arg value="-lglib-2.0"/>
-                <arg value="-lgobject-2.0"/>
-                <arg value="-lgtk-3"/>
-                <arg value="-lgdk-3"/>
-            </link>
-        </build>
-        <build module="nfd" suffix="_portal" simple="true" linker="g++" if:true="${binding.nfd}">
-            <beforeCompile>
-                <local name="linux.triplet"/>
-                <condition property="linux.triplet" value="x86_64-linux-gnu"><not><isset property="build.arch.arm"/></not></condition>
-                <condition property="linux.triplet" value="arm-linux-gnueabihf"><isset property="build.arch.arm32"/></condition>
-                <condition property="linux.triplet" value="aarch64-linux-gnu"><isset property="build.arch.arm64"/></condition>
+<!--                <compile lang="c++">-->
+<!--                    <arg line="-I/usr/include/gtk-3.0 -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/usr/lib/${linux.triplet}/glib-2.0/include -I/usr/include/pango-1.0 -I/usr/include/harfbuzz -I/usr/include/cairo -I/usr/include/gdk-pixbuf-2.0 -I/usr/include/atk-1.0"/>-->
+<!--                    <arg value="-I${src.main.rel}/include"/>-->
+<!--                    <fileset dir="." includes="${src.main}/nfd_gtk.cpp"/>-->
+<!--                </compile>-->
+<!--            </beforeCompile>-->
+<!--            <source>-->
+<!--                <arg value="-I${src.main.rel}/include"/>-->
+<!--            </source>-->
+<!--            <link>-->
+<!--                <arg value="-lglib-2.0"/>-->
+<!--                <arg value="-lgobject-2.0"/>-->
+<!--                <arg value="-lgtk-3"/>-->
+<!--                <arg value="-lgdk-3"/>-->
+<!--            </link>-->
+<!--        </build>-->
+<!--        <build module="nfd" suffix="_portal" simple="true" linker="g++" if:true="${binding.nfd}">-->
+<!--            <beforeCompile>-->
+<!--                <local name="linux.triplet"/>-->
+<!--                <condition property="linux.triplet" value="x86_64-linux-gnu"><not><isset property="build.arch.arm"/></not></condition>-->
+<!--                <condition property="linux.triplet" value="arm-linux-gnueabihf"><isset property="build.arch.arm32"/></condition>-->
+<!--                <condition property="linux.triplet" value="aarch64-linux-gnu"><isset property="build.arch.arm64"/></condition>-->
 
-                <compile lang="c++">
-                    <arg line="-I/usr/include/dbus-1.0 -I/usr/lib64/dbus-1.0/include -I/usr/lib/${linux.triplet}/dbus-1.0/include"/>
-                    <arg value="-I${src.main.rel}/include"/>
-                    <fileset dir="." includes="${src.main}/nfd_portal.cpp"/>
-                </compile>
-            </beforeCompile>
-            <source>
-                <arg value="-I${src.main.rel}/include"/>
-            </source>
-            <link>
-                <arg value="-ldbus-1"/>
-            </link>
-        </build>
+<!--                <compile lang="c++">-->
+<!--                    <arg line="-I/usr/include/dbus-1.0 -I/usr/lib64/dbus-1.0/include -I/usr/lib/${linux.triplet}/dbus-1.0/include"/>-->
+<!--                    <arg value="-I${src.main.rel}/include"/>-->
+<!--                    <fileset dir="." includes="${src.main}/nfd_portal.cpp"/>-->
+<!--                </compile>-->
+<!--            </beforeCompile>-->
+<!--            <source>-->
+<!--                <arg value="-I${src.main.rel}/include"/>-->
+<!--            </source>-->
+<!--            <link>-->
+<!--                <arg value="-ldbus-1"/>-->
+<!--            </link>-->
+<!--        </build>-->
 
         <!-- Nuklear -->
         <build simple="true" module="nuklear">
@@ -322,8 +327,6 @@
         <!-- OpenGL ES -->
         <build_simple module="opengles"/>
 
-        <!-- OpenVR -->
-        <build_simple module="openvr"/>
 
         <!-- Par -->
         <build simple="true" module="par">
@@ -491,7 +494,7 @@
             <update-dependency module="jemalloc" artifact="libjemalloc.so"/>
             <update-dependency module="ktx" artifact="libktx.so"/>
             <update-dependency module="openal" artifact="libopenal.so"/>
-            <update-dependency module="openvr" artifact="libopenvr_api.so"/>
+<!--            <update-dependency module="openvr" artifact="libopenvr_api.so"/>-->
             <update-dependency module="openxr" artifact="libopenxr_loader.so"/>
             <update-dependency module="opus" artifact="libopus.so"/>
             <update-dependency module="shaderc" artifact="libshaderc.so"/>
