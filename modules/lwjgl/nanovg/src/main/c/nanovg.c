@@ -2238,8 +2238,8 @@ void nvgFill(NVGcontext* ctx)
 		nvg__expandFill(ctx, 0.0f, NVG_MITER, 2.4f);
 
 	// Apply global alpha
-	fillPaint.innerColor.a *= state->alpha;
-	fillPaint.outerColor.a *= state->alpha;
+//	fillPaint.innerColor.a *= state->alpha;
+//	fillPaint.outerColor.a *= state->alpha;
 
 	ctx->params.renderFill(ctx->params.userPtr, &fillPaint, state->compositeOperation, &state->scissor, ctx->fringeWidth,
 						   ctx->cache->bounds, ctx->cache->paths, ctx->cache->npaths);
