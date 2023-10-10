@@ -922,9 +922,10 @@ static int glnvg__renderCreate(void* uptr)
       "#else\n"
       "   vec4 color = texture2D(tex, pt);\n"
       "#endif\n"
-      "   strokeAlpha = strokeMask();\n"
-      "   if (strokeAlpha < strokeThr) discard;\n"
-      "   if (texType == 1) color = vec4(color.xyz*color.w,color.w);"
+//      "   strokeAlpha = strokeMask();\n"
+      "   strokeAlpha = 0.3;\n"
+//      "   if (strokeAlpha < strokeThr) discard;\n"
+//      "   if (texType == 1) color = vec4(color.xyz*color.w,color.w);"
       "   result = innerCol * color * strokeAlpha;\n"
       " } else if(type == 7) {      // fill color\n"
       "   strokeAlpha = strokeMask();\n"
@@ -1282,7 +1283,7 @@ static int glnvg__convertPaint(GLNVGcontext* gl, GLNVGfragUniforms* frag, NVGpai
 		else
 			frag->texType = 2.0f;
 		#endif
-//		printf("frag->texType = %d\n", frag->texType);
+		printf("frag->texType = %d\n", frag->texType);
 	} else {
 		frag->type = NSVG_SHADER_FILLGRAD;
 		frag->radius = paint->radius;
