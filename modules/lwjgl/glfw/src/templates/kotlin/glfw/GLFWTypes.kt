@@ -570,6 +570,32 @@ val GLFWkeyfun = Module.GLFW.callback {
     }
 }
 
+val GLFWtouchfun = Module.GLFW.callback {
+    void(
+        "GLFWTouchCallback",
+        "Will be called when a key is pressed, repeated or released.",
+
+        GLFWwindow.p("window", "the window that received the event"),
+        int("touch", ""),
+        int("type", ""),
+        int("action", ""),
+        double("xpos", "the new cursor x-coordinate, relative to the left edge of the content area"),
+        double("ypos", "the new cursor y-coordinate, relative to the top edge of the content area"),
+
+        nativeType = "GLFWtouchfun"
+    ) {
+        documentation = ""
+        javaImport("static org.lwjgl.glfw.GLFW.*")
+        additionalCode = """
+    /** See {@link GLFW#glfwSetKeyCallback SetKeyCallback}. */
+    public GLFWTouchCallback set(long window) {
+        glfwSetTouchCallback(window, this);
+        return this;
+    }
+    """
+    }
+}
+
 val GLFWcharfun = Module.GLFW.callback {
     void(
         "GLFWCharCallback",

@@ -71,6 +71,18 @@ val GLFW = "GLFW".nativeClass(Module.GLFW, prefix = "GLFW", binding = GLFW_BINDI
     )
 
     IntConstant(
+        "FOR touch",
+
+        "MOVE".."3"
+    )
+
+    IntConstant(
+        "FOR touch",
+
+        "CANCEL".."4"
+    )
+
+    IntConstant(
         "Joystick hat states.",
 
         "HAT_CENTERED".."0",
@@ -567,7 +579,8 @@ val GLFW = "GLFW".nativeClass(Module.GLFW, prefix = "GLFW", binding = GLFW_BINDI
         "STICKY_KEYS"..0x00033002,
         "STICKY_MOUSE_BUTTONS"..0x00033003,
         "LOCK_KEY_MODS"..0x00033004,
-        "RAW_MOUSE_MOTION"..0x00033005
+        "RAW_MOUSE_MOTION"..0x00033005,
+        "TOUCH"..0x00033006
     ).javaDocLinks
 
     IntConstant(
@@ -657,6 +670,9 @@ val GLFW = "GLFW".nativeClass(Module.GLFW, prefix = "GLFW", binding = GLFW_BINDI
     IntConstant("Legacy name for compatibility.", "HRESIZE_CURSOR".."GLFW_RESIZE_EW_CURSOR")
     IntConstant("Legacy name for compatibility.", "VRESIZE_CURSOR".."GLFW_RESIZE_NS_CURSOR")
     IntConstant("Legacy name for compatibility.", "HAND_CURSOR".."GLFW_POINTING_HAND_CURSOR")
+
+    IntConstant("for touch", "GLFW_SCREEN_TOUCH".."0x00038001")
+    IntConstant("for touch.", "GLFW_TRACKPAD_TOUCH".."0x00038002")
 
     IntConstant(
         "Monitor events.",
@@ -3075,6 +3091,18 @@ val GLFW = "GLFW".nativeClass(Module.GLFW, prefix = "GLFW", binding = GLFW_BINDI
 
         GLFWwindow.p("window", "the window whose callback to set"),
         nullable..GLFWkeyfun("cbfun", "the new callback or #NULL to remove the currently set callback"),
+
+        returnDoc = "the previously set callback, or #NULL if no callback was set",
+        since = "version 1.0"
+    )
+
+    GLFWtouchfun(
+        "SetTouchCallback",
+        """        
+        """,
+
+        GLFWwindow.p("window", "the window whose callback to set"),
+        nullable..GLFWtouchfun("cbfun", "the new callback or #NULL to remove the currently set callback"),
 
         returnDoc = "the previously set callback, or #NULL if no callback was set",
         since = "version 1.0"
